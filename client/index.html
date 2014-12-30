@@ -13,20 +13,26 @@
     <script src="scripts/app.js"></script>
   </head>
   <body>
+    <h1>Chatterbox</h1>
     <div id="friendsContainer">
-      <h3>Friend List</h3>
+      <h3>Friends List</h3>
       <ul id = "friendList"></ul>
     </div>
     <div id="main">
-      <h1>Chatterbox</h1>
-      <div id="chatWindow">
-        <label for="newChat">Chat:</label>
+      <div class="chatWindow">
+        <label for="newChat">What's on you mind:</label>
         <input id="newChat" onkeydown="if (event.keyCode == 13) app.handleSubmit(this);">
-        <hr>
-        <h3 id="chatRoomTitle">Lobby</h3>
+        <br><br>
+        <i>You are in the </i>
+        <b id="chatRoomTitle">
+          <select id="roomSelect">
+            <option>Lobby</option>
+          </select>
+        </b>
+      </div>
+      <div class="chatWindow">
         <ul id="chats"></ul>
       </div>
-      <ul id = "roomSelect"></ul>
     </div>
   </body>
 </html>

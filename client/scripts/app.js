@@ -1,15 +1,16 @@
 var app = {
-  'friendList': {}
+  'friendList': {},
+  'chatrooms': {},
+  'currentuser': undefined
 };
 
 app.init = function(){
-  console.log("running");
+  this.fetch();
   var context = this;
   setInterval(function() {
     context.fetch();
   },1000);
 };
-
 
 app.send = function(message){
   $.ajax({
@@ -49,8 +50,6 @@ app.clearMessages = function(){
 };
 
 app.addMessage = function(message){
-  // send message to server
-  // refresh message display
   this.send(message);
   this.fetch();
 };
@@ -60,6 +59,7 @@ app.loadMessages = function(results) {
     var username = results[i]['username'];
     var text = results[i]['text'];
     var room = results[i]['roomname'];
+    this.addRoom(room);
 
     var newMsg = $('<li/>');
     var user = $('<div/>')
@@ -72,7 +72,7 @@ app.loadMessages = function(results) {
       user.attr('onclick','app.addFriend(this)');
     }
 
-    var msgBody = $('<div/>').text(text);
+    var msgBody = $('<div/>').text(text).addClass('msgText');
 
     user.appendTo(newMsg);
     msgBody.appendTo(newMsg);
@@ -81,7 +81,11 @@ app.loadMessages = function(results) {
 };
 
 app.addRoom = function(room){
-  var newRoom = $('<li/>').appendTo('#roomSelect');
+  if(this.chatrooms[room] === undefined) {
+    this.chatrooms[room] = true;
+    var newRoom = $('<option/>').text(room).appendTo('#roomSelect');
+  }
+  this.sortElements('#roomSelect', 'option');
 };
 
 app.addFriend = function(target){
@@ -91,17 +95,37 @@ app.addFriend = function(target){
     .html(user)
     .appendTo('#friendList');
   $(target).attr('onclick','');
+  this.sortElements('#friendList', 'li');
+};
+
+app.sortElements = function(target, type) {
+  var targetOptions = $(target+" "+type);
+  var selected = $(target).val();
+  if (type==='li') selected = $(target).innerText;
+
+  targetOptions.sort(function(a,b) {
+    var atext = (type==='option' ? a.text : a.innerText).toLowerCase();
+    var btext = (type==='option' ? b.text : b.innerText).toLowerCase();
+    if (atext > btext) return 1;
+    else if (atext < btext) return -1;
+    else return 0
+  });
+
+  $(target).empty().append(targetOptions);
+  $(target).val(selected);
 };
 
 app.handleSubmit = function(input){
-  alert($(input).val());
   var message = {
-    'username': "tim adrian",
+    'username': document.URL.split('username=')[1],
     'text': $(input).val(),
-    'roomname': "lobby"
+    'roomname': $('#roomSelect').val()
   };
   this.send(message);
   $('#newChat').val('');
 };
 
 app.init();
+
+
+

@@ -1,8 +1,14 @@
 body {
   background: #eee;
   text-align: center;
-  padding: 0 25px;
+  /*padding: 0 25px;*/
   font-family: arial, sans-serif;
+}
+
+h1 {
+  margin: 0px auto 5px;
+  font-size: 35px;
+  padding: 5px;
 }
 
 #main {
@@ -10,16 +16,9 @@ body {
   margin: auto;
   text-align: left;
   background: white;
-  padding: 50px 60px;
+  padding: 10px 60px;
   border: solid #ddd;
   border-width: 0 1px 1px 1px;
-}
-
-#main h1 {
-  margin-top: 0;
-  font-size: 35px;
-  margin-bottom: 5px;
-  padding: 5px;
 }
 
 #main h1 span {
@@ -27,7 +26,27 @@ body {
 }
 
 #main ul {
+  list-style-type: none;
+  padding:3px;
+  margin: 0px auto;
+  text-align: left;
+}
+
+#main li {
+  margin: 10px auto;
+  border: 1px LightGray solid;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+#main .username {
+  font-size: 1.1em;
+  padding-left: 0px;
+}
+
+#main .msgText {
   padding-left: 20px;
+  font-style: italic;
 }
 
 #main .error {
@@ -83,9 +102,12 @@ form input[type=text] {
   padding: 10px;
 }
 
-#chatWindow {
+.chatWindow {
   background-color: AliceBlue;
-  padding: 5%;
+  padding: 3% 5%;
+  margin: 3% auto;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px gray;
 }
 
 #newChat {
@@ -94,4 +116,21 @@ form input[type=text] {
 
 #friendsContainer {
   float:left;
+  background-color: white;
+  margin-left: 0px;
+  padding: 5px 10px;
+  border: solid #ddd;
+  border-width: 0 1px 1px 1px;
+  max-width: 200px;
+}
+
+#friendsContainer ul {
+  list-style-type: none;
+  padding:3px;
+  text-align: left;
+}
+
+#roomSelect {
+  max-width: 345px;
+  font-size: 1em;
 }
