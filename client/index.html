@@ -21,7 +21,7 @@
       <h1>Chatterbox</h1>
       <div id="chatWindow">
         <label for="newChat">Chat:</label>
-        <input id="newChat">
+        <input id="newChat" onkeydown="if (event.keyCode == 13) app.handleSubmit(this);">
         <hr>
         <h3 id="chatRoomTitle">Lobby</h3>
         <ul id="chats"></ul>
