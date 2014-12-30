@@ -91,3 +91,7 @@ form input[type=text] {
 #newChat {
   width: 100%;
 }
+
+#friendsContainer {
+  float:left;
+}

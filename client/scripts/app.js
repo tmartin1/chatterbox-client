@@ -1,4 +1,6 @@
-var app = {};
+var app = {
+  'friendList': {}
+};
 
 app.init = function(){
   console.log("running");
@@ -22,30 +24,31 @@ $('#newChat').keypress(function(key){
 app.send = function(message){
   $.ajax({
     type: 'POST',
+    url: 'https://api.parse.com/1/classes/chatterbox',
     data: JSON.stringify(message),
     contentType: 'application/json',
     success: function (data) {
       console.log('chatterbox: Message sent');
     },
     error: function (data) {
-      // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
       console.error('chatterbox: Failed to send message');
     }
   });
 };
 
 app.fetch = function(){
-  console.log('running fetch');
+  var context = this;
   $.ajax({
     type: 'GET',
+    url: 'https://api.parse.com/1/classes/chatterbox',
     data: 'data',
     contentType: 'application/json',
     success: function (data) {
       console.log('chatterbox: Messages recieved');
-      // this.loadMessages(data['results']);
+      context.clearMessages();
+      context.loadMessages(data['results']);
     },
     error: function (data) {
-      // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
       console.error('chatterbox: Failed to recieve messages');
     }
   });
@@ -70,19 +73,23 @@ app.loadMessages = function(results) {
       // if username is on friendList, display in bold
       // else onclick=addFriend(this)
     // display chat
-  console.log(results);
   for (var i=0; i<results.length; i++) {
-    var username = results[i].username;
-    var text = results[i].text;
-    var room = results[i].roomname;
+    var username = results[i]['username'];
+    var text = results[i]['text'];
+    var room = results[i]['roomname'];
 
     var newMsg = $('<li/>');
     var user = $('<div/>')
-      .val(username)
+      .html(username)
       .addClass('username');
-    user.attr('onclick',addFriend(username));
 
-    var msgBody = $('<div/>').addClass('msgBody');
+    if (this.friendList[username]) {
+      user.css('font-weight','bold');
+    } else {
+      user.attr('onclick','app.addFriend(this)');
+    }
+
+    var msgBody = $('<div/>').html(text);
 
     user.appendTo(newMsg);
     msgBody.appendTo(newMsg);
@@ -91,7 +98,6 @@ app.loadMessages = function(results) {
 };
 
 app.refreshMessages = function() {
-  this.clearMessages();
   this.fetch();
   console.log('refreshing');
 };
@@ -100,9 +106,14 @@ app.addRoom = function(room){
   var newRoom = $('<li/>').appendTo('#roomSelect');
 };
 
-app.addFriend = function(user){
+app.addFriend = function(target){
+  console.log(target);
+  var user = $(target).text();
+  this.friendList[user] = true;
+  console.log(user);
+  console.log(this.friendList);
   var newFriend = $('<li/>')
-    .val(user)
+    .html(user)
     .appendTo('#friendList');
 };
 
@@ -113,3 +124,5 @@ app.addFriend = function(user){
 app.handleSubmit = function(){
 
 };
+
+app.init();
